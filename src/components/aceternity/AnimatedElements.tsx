@@ -6,6 +6,7 @@ interface AnimatedCardProps {
   className?: string;
   delay?: number;
   hover?: boolean;
+  onClick?: () => void;
 }
 
 export function AnimatedCard({
@@ -13,6 +14,7 @@ export function AnimatedCard({
   className = '',
   delay = 0,
   hover = true,
+  onClick,
 }: AnimatedCardProps) {
   return (
     <motion.div
@@ -21,6 +23,7 @@ export function AnimatedCard({
       transition={{ duration: 0.3, delay }}
       whileHover={hover ? { y: -4, boxShadow: '0 10px 30px rgba(0,0,0,0.3)' } : {}}
       className={className}
+      onClick={onClick}
     >
       {children}
     </motion.div>

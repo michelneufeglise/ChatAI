@@ -1,25 +1,19 @@
-import { useEffect, useState } from 'react';
-import { invoke } from '@tauri-apps/api/tauri';
+import { useEffect } from 'react';
 import ChatWindow from './pages/ChatWindow';
+import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState('');
-  const [name, setName] = useState('');
-
-  async function greet() {
-    setGreetMsg(await invoke('greet', { name }));
-  }
-
   useEffect(() => {
-    // Initialize app
-    console.log('ChatAI initialized');
+    console.log('ChatAI initialised');
   }, []);
 
   return (
-    <div className="app">
-      <ChatWindow />
-    </div>
+    <ErrorBoundary>
+      <div className="app">
+        <ChatWindow />
+      </div>
+    </ErrorBoundary>
   );
 }
 

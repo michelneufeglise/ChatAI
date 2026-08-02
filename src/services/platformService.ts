@@ -152,14 +152,14 @@ export async function checkPlatformStatus(): Promise<PlatformSetup[]> {
     await invoke<string>('telegram_authenticate');
     platforms.push({
       name: 'telegram',
-      configured: !!process.env.VITE_TELEGRAM_BOT_TOKEN,
+      configured: !!import.meta.env.VITE_TELEGRAM_BOT_TOKEN,
       ready: true,
       status: 'Authenticated',
     });
   } catch {
     platforms.push({
       name: 'telegram',
-      configured: !!process.env.VITE_TELEGRAM_BOT_TOKEN,
+      configured: !!import.meta.env.VITE_TELEGRAM_BOT_TOKEN,
       ready: false,
       status: 'Not authenticated',
     });

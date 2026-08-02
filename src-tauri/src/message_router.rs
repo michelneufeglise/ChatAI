@@ -77,6 +77,7 @@ impl MessageRouter {
           unread_count: 0,
           created_at: chrono::Utc::now().to_rfc3339(),
           updated_at: chrono::Utc::now().to_rfc3339(),
+          is_archived: Some(0),
         };
         crate::db::insert_conversation(db_conn, &conversation).map_err(|e| e.to_string())
       }

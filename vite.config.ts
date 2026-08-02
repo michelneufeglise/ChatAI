@@ -17,13 +17,12 @@ export default defineConfig(async () => ({
     },
   },
 
-  // Vite options tailored for Tauri to prevent too much magic happening by default
+  // Vite options tailored for Tauri
   clearScreen: false,
   server: {
     port: 1420,
     strictPort: true,
     watch: {
-      // Using polling since fsEvents doesn't work in network mounted folders
       usePolling: true,
       interval: 600,
     },
@@ -33,4 +32,21 @@ export default defineConfig(async () => ({
     minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
     sourcemap: !!process.env.TAURI_DEBUG,
   },
+
+  // Vitest configuration
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/__tests__/setup.ts'],
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    alias: {
+      '@': '/src',
+      '@components': '/src/components',
+      '@services': '/src/services',
+      '@hooks': '/src/hooks',
+      '@store': '/src/store',
+      '@/types': '/src/types/index.ts',
+    },
+  },
 }));
+

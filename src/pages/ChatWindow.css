@@ -1,24 +1,44 @@
 .chat-window {
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  background: #1a1a1a;
+  background: #0f0f1e;
+}
+
+.offline-banner {
+  background: linear-gradient(90deg, #d97706, #b45309);
+  color: #fff;
+  font-size: 0.82em;
+  font-weight: 600;
+  text-align: center;
+  padding: 7px 16px;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.chat-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
 }
 
 .chat-sidebar {
   width: 300px;
-  border-right: 1px solid #333;
-  background: #242424;
+  min-width: 260px;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .chat-main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #1a1a1a;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .chat-empty {
@@ -26,6 +46,69 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #888;
-  font-size: 1.1em;
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+}
+
+.chat-empty-content {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.chat-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: floatEmpty 3s ease-in-out infinite;
+}
+
+.chat-empty-content h2 {
+  margin: 0 0 10px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #646cff, #a264ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.chat-empty-content p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.35);
+}
+
+@keyframes floatEmpty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* Apply flex row layout to the sidebar+main area */
+.chat-window {
+  flex-direction: column;
+}
+
+/* Sidebar + main row */
+.chat-window > .offline-banner ~ .chat-sidebar,
+.chat-window > .chat-sidebar {
+  flex-direction: row;
+}
+
+/* Use CSS grid for the overall layout */
+.chat-window {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 300px 1fr;
+}
+
+.offline-banner {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.chat-sidebar {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.chat-main {
+  grid-column: 2;
+  grid-row: 2;
 }

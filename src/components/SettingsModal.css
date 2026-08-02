@@ -1,0 +1,348 @@
+.settings-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.settings-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.settings-modal {
+  position: relative;
+  width: 480px;
+  max-width: 90%;
+  max-height: 85vh;
+  background: rgba(20, 20, 35, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 
+              0 0 40px rgba(100, 108, 255, 0.1);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1001;
+  color: #fff;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.settings-header h3 {
+  margin: 0;
+  font-size: 1.25em;
+  font-weight: 700;
+  background: linear-gradient(135deg, #646cff 0%, #a264ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border-color: transparent;
+}
+
+.settings-content {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settings-section h4 {
+  margin: 0;
+  font-size: 1em;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding-bottom: 6px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.85em;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9em;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: rgba(100, 108, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.select-wrapper {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.select-wrapper select {
+  flex: 1;
+}
+
+.refresh-models-button {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.refresh-models-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(100, 108, 255, 0.3);
+}
+
+.refresh-models-button.spinning svg {
+  animation: spin 1s linear infinite;
+}
+
+.theme-toggle-group {
+  display: flex;
+  gap: 12px;
+}
+
+.theme-option {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.theme-option:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(100, 108, 255, 0.3);
+  color: #fff;
+}
+
+.theme-option.active {
+  background: linear-gradient(135deg, rgba(100, 108, 255, 0.2) 0%, rgba(162, 100, 255, 0.15) 100%);
+  border-color: rgba(100, 108, 255, 0.5);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(100, 108, 255, 0.25);
+}
+
+.settings-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 18px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cancel-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 18px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #646cff 0%, #8764ff 100%);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(100, 108, 255, 0.3);
+  transition: all 0.2s;
+}
+
+.save-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(100, 108, 255, 0.4);
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.save-btn.saved {
+  background: #10b981;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.save-btn.error {
+  background: #ef4444;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Light Theme Styling overrides */
+:global(html.light) .settings-modal {
+  background: rgba(245, 245, 250, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1), 0 0 40px rgba(100, 108, 255, 0.05);
+  color: #1a1a2e;
+}
+
+:global(html.light) .settings-header {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+:global(html.light) .close-button {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+:global(html.light) .close-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #000;
+}
+
+:global(html.light) .settings-section h4 {
+  color: rgba(0, 0, 0, 0.85);
+  border-bottom-color: rgba(0, 0, 0, 0.05);
+}
+
+:global(html.light) .form-group label {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+:global(html.light) .form-group input,
+:global(html.light) .form-group select {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #1a1a2e;
+}
+
+:global(html.light) .form-group input:focus,
+:global(html.light) .form-group select:focus {
+  border-color: rgba(100, 108, 255, 0.6);
+  background: rgba(0, 0, 0, 0.01);
+}
+
+:global(html.light) .refresh-models-button {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+:global(html.light) .refresh-models-button:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #000;
+}
+
+:global(html.light) .theme-option {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+:global(html.light) .theme-option:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: #000;
+}
+
+:global(html.light) .theme-option.active {
+  background: linear-gradient(135deg, rgba(100, 108, 255, 0.12) 0%, rgba(162, 100, 255, 0.08) 100%);
+  border-color: rgba(100, 108, 255, 0.4);
+  color: #646cff;
+}
+
+:global(html.light) .settings-footer {
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
+
+:global(html.light) .cancel-btn {
+  border-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+:global(html.light) .cancel-btn:hover {
+  background: rgba(0, 0, 0, 0.03);
+  color: #000;
+}

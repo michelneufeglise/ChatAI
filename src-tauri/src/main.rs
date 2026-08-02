@@ -76,6 +76,7 @@ async fn create_conversation(
       unread_count: 0,
       created_at: chrono::Utc::now().to_rfc3339(),
       updated_at: chrono::Utc::now().to_rfc3339(),
+      is_archived: Some(0),
     };
 
     db::insert_conversation(&conn, &conversation).map_err(|e| e.to_string())?;
@@ -111,6 +112,7 @@ async fn send_message(
   conversation_id: &str,
   content: &str,
   platform: &str,
+  window: tauri::Window,
   state: State<'_, AppState>,
 ) -> Result<Message, String> {
   let db_pool = state.db_pool.lock().unwrap();
@@ -131,6 +133,11 @@ async fn send_message(
     };
 
     db::insert_message(&conn, &message).map_err(|e| e.to_string())?;
+    
+    // Emit event to frontend
+    let ui_message = message_router::MessageRouter::transform_for_ui(&message);
+    let _ = window.emit("new-message", &ui_message);
+    
     Ok(message)
   } else {
     Err("Database not initialized".to_string())
@@ -317,12 +324,17 @@ fn get_whatsapp_setup_guide() -> Result<String, String> {
 async fn route_incoming_message(
   platform: &str,
   message_data: &str,
+  window: tauri::Window,
   state: State<'_, AppState>,
 ) -> Result<Message, String> {
   let db_pool = state.db_pool.lock().unwrap();
   if let Some(pool) = db_pool.as_ref() {
     let conn = pool.get().map_err(|e| e.to_string())?;
-    message_router::MessageRouter::route_incoming_message(&conn, platform, message_data)
+    let message = message_router::MessageRouter::route_incoming_message(&conn, platform, message_data)?;
+    // Emit event to frontend
+    let ui_message = message_router::MessageRouter::transform_for_ui(&message);
+    let _ = window.emit("new-message", &ui_message);
+    Ok(message)
   } else {
     Err("Database not initialized".to_string())
   }
@@ -333,6 +345,7 @@ async fn route_outgoing_message(
   platform: &str,
   conversation_id: &str,
   content: &str,
+  window: tauri::Window,
   state: State<'_, AppState>,
 ) -> Result<Message, String> {
   // First send via platform
@@ -347,7 +360,40 @@ async fn route_outgoing_message(
     db::insert_message(&conn, &message).map_err(|e| e.to_string())?;
   }
 
+  // Emit event to frontend
+  let ui_message = message_router::MessageRouter::transform_for_ui(&message);
+  let _ = window.emit("new-message", &ui_message);
+
   Ok(message)
+}
+
+#[tauri::command]
+async fn delete_conversation(
+  id: &str,
+  state: State<'_, AppState>,
+) -> Result<(), String> {
+  let db_pool = state.db_pool.lock().unwrap();
+  if let Some(pool) = db_pool.as_ref() {
+    let conn = pool.get().map_err(|e| e.to_string())?;
+    db::delete_conversation(&conn, id).map_err(|e| e.to_string())
+  } else {
+    Err("Database not initialized".to_string())
+  }
+}
+
+#[tauri::command]
+async fn archive_conversation(
+  id: &str,
+  archive: bool,
+  state: State<'_, AppState>,
+) -> Result<(), String> {
+  let db_pool = state.db_pool.lock().unwrap();
+  if let Some(pool) = db_pool.as_ref() {
+    let conn = pool.get().map_err(|e| e.to_string())?;
+    db::archive_conversation(&conn, id, archive).map_err(|e| e.to_string())
+  } else {
+    Err("Database not initialized".to_string())
+  }
 }
 
 // ============================================================================
@@ -382,7 +428,7 @@ async fn set_setting(
 
 fn main() {
   // Initialize database
-  let db_path = tauri::api::path::app_dir(&tauri::Config::default())
+  let db_path = tauri::api::path::app_data_dir(&tauri::Config::default())
     .and_then(|p| p.to_str().map(String::from))
     .unwrap_or_else(|| "chatai.db".to_string());
 
@@ -429,6 +475,9 @@ fn main() {
       // Settings
       get_setting,
       set_setting,
+      // Delete & Archive Conversations
+      delete_conversation,
+      archive_conversation,
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

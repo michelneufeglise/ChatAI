@@ -1,0 +1,87 @@
+.error-boundary-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 20, 0.95);
+  backdrop-filter: blur(12px);
+  z-index: 9999;
+  padding: 24px;
+}
+
+.error-boundary-card {
+  max-width: 500px;
+  width: 100%;
+  background: rgba(20, 20, 35, 0.9);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(239, 68, 68, 0.1);
+  color: #fff;
+}
+
+.error-icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+}
+
+.error-boundary-card h2 {
+  margin: 0 0 12px 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #f87171, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.error-message {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.error-details {
+  text-align: left;
+  margin-bottom: 24px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.error-details summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  user-select: none;
+}
+
+.error-details pre {
+  margin: 12px 0 0;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  overflow: auto;
+  max-height: 200px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.error-reset-btn {
+  background: linear-gradient(135deg, #646cff, #8764ff);
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(100, 108, 255, 0.4);
+  transition: box-shadow 0.2s;
+}
+
+.error-reset-btn:hover {
+  box-shadow: 0 6px 30px rgba(100, 108, 255, 0.6);
+}

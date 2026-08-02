@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/tauri';
-import { OllamaResponse } from '@types/index';
+import { OllamaResponse } from '@/types';
 
 export async function queryOllama(prompt: string, model?: string): Promise<OllamaResponse> {
   try {

@@ -1,4 +1,4 @@
-import { Message } from '@types/index';
+import { Message } from '@/types';
 import { motion } from 'framer-motion';
 import { Check, CheckCheck, Clock } from 'lucide-react';
 import './MessageBubble.css';
@@ -9,7 +9,6 @@ interface MessageBubbleProps {
 
 export default function MessageBubble({ message }: MessageBubbleProps) {
   const isAI = message.platform === 'ai';
-  const isSending = message.status === 'sending';
 
   const statusIcon = {
     sending: <Clock size={12} />,
@@ -45,7 +44,7 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       >
         <div className="sender-info">
           <span className="sender-name">{message.sender.name}</span>
-          {message.platform !== 'user' && (
+          {message.sender.id !== 'user' && (
             <span className={`platform-badge platform-${message.platform}`}>
               {message.platform === 'whatsapp' && '💬 WhatsApp'}
               {message.platform === 'telegram' && '✈️ Telegram'}

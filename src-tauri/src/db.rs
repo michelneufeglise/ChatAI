@@ -2,7 +2,6 @@ use r2d2::Pool;
 use r2d2_sqlite::SqliteConnectionManager;
 use rusqlite::{params, Result as SqliteResult};
 use serde::{Deserialize, Serialize};
-use std::sync::Mutex;
 
 pub type DbPool = Pool<SqliteConnectionManager>;
 
@@ -15,6 +14,7 @@ pub struct Conversation {
   pub unread_count: i32,
   pub created_at: String,
   pub updated_at: String,
+  pub is_archived: Option<i32>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -47,6 +47,9 @@ pub fn init_db(db_path: &str) -> Result<DbPool, Box<dyn std::error::Error>> {
   {
     let conn = pool.get()?;
     create_tables(&conn)?;
+    
+    // Add is_archived if not exists
+    let _ = conn.execute("ALTER TABLE conversations ADD COLUMN is_archived INTEGER DEFAULT 0", []);
   }
 
   Ok(pool)
@@ -63,7 +66,8 @@ fn create_tables(conn: &rusqlite::Connection) -> SqliteResult<()> {
       unread_count INTEGER DEFAULT 0,
       last_message_id TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      is_archived INTEGER DEFAULT 0
     )",
     [],
   )?;
@@ -137,8 +141,8 @@ pub fn insert_conversation(
   conversation: &Conversation,
 ) -> SqliteResult<()> {
   conn.execute(
-    "INSERT INTO conversations (id, title, platforms, avatar, unread_count, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO conversations (id, title, platforms, avatar, unread_count, created_at, updated_at, is_archived)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
     params![
       &conversation.id,
       &conversation.title,
@@ -147,6 +151,7 @@ pub fn insert_conversation(
       conversation.unread_count,
       &conversation.created_at,
       &conversation.updated_at,
+      conversation.is_archived.unwrap_or(0),
     ],
   )?;
   Ok(())
@@ -157,7 +162,7 @@ pub fn get_conversation(
   id: &str,
 ) -> SqliteResult<Option<Conversation>> {
   let mut stmt = conn.prepare(
-    "SELECT id, title, platforms, avatar, unread_count, created_at, updated_at FROM conversations WHERE id = ?",
+    "SELECT id, title, platforms, avatar, unread_count, created_at, updated_at, is_archived FROM conversations WHERE id = ?",
   )?;
 
   let result = stmt.query_row(params![id], |row| {
@@ -169,6 +174,7 @@ pub fn get_conversation(
       unread_count: row.get(4)?,
       created_at: row.get(5)?,
       updated_at: row.get(6)?,
+      is_archived: row.get(7).ok(),
     })
   });
 
@@ -181,7 +187,7 @@ pub fn get_conversation(
 
 pub fn get_all_conversations(conn: &rusqlite::Connection) -> SqliteResult<Vec<Conversation>> {
   let mut stmt = conn.prepare(
-    "SELECT id, title, platforms, avatar, unread_count, created_at, updated_at FROM conversations ORDER BY updated_at DESC",
+    "SELECT id, title, platforms, avatar, unread_count, created_at, updated_at, is_archived FROM conversations ORDER BY updated_at DESC",
   )?;
 
   let conversations = stmt.query_map([], |row| {
@@ -193,6 +199,7 @@ pub fn get_all_conversations(conn: &rusqlite::Connection) -> SqliteResult<Vec<Co
       unread_count: row.get(4)?,
       created_at: row.get(5)?,
       updated_at: row.get(6)?,
+      is_archived: row.get(7).ok(),
     })
   })?;
 
@@ -277,5 +284,17 @@ pub fn get_setting(conn: &rusqlite::Connection, key: &str) -> SqliteResult<Optio
     Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
     Err(e) => Err(e),
   }
+}
+
+pub fn delete_conversation(conn: &rusqlite::Connection, id: &str) -> SqliteResult<()> {
+  conn.execute("DELETE FROM messages WHERE conversation_id = ?", params![id])?;
+  conn.execute("DELETE FROM conversations WHERE id = ?", params![id])?;
+  Ok(())
+}
+
+pub fn archive_conversation(conn: &rusqlite::Connection, id: &str, archive: bool) -> SqliteResult<()> {
+  let val = if archive { 1 } else { 0 };
+  conn.execute("UPDATE conversations SET is_archived = ? WHERE id = ?", params![val, id])?;
+  Ok(())
 }
 

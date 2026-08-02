@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/tauri';
-import { Message } from '@types/index';
+import { Conversation, Message } from '@/types';
 
 export async function sendMessage(conversationId: string, content: string): Promise<Message> {
   try {
@@ -26,9 +26,9 @@ export async function getMessages(conversationId: string): Promise<Message[]> {
   }
 }
 
-export async function loadConversations() {
+export async function loadConversations(): Promise<Conversation[]> {
   try {
-    const conversations = await invoke('get_conversations');
+    const conversations = await invoke<Conversation[]>('get_conversations');
     return conversations;
   } catch (error) {
     console.error('Error loading conversations:', error);

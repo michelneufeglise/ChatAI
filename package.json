@@ -4,12 +4,15 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "tauri dev",
-    "build": "tauri build",
+    "dev": "vite",
+    "build": "tsc && vite build",
     "tauri": "tauri",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.5.3",
@@ -22,16 +25,19 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.13",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
-    "@vitejs/plugin-react": "^4.2.0",
+    "@vitejs/plugin-react": "^4.7.0",
     "eslint": "^8.53.0",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "jsdom": "^30.0.1",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
-    "vite": "^5.0.2"
+    "vite": "^5.0.2",
+    "vitest": "^4.1.10"
   }
 }
-
