@@ -1,0 +1,30 @@
+{
+  "build": {
+    "beforeBuildCommand": "",
+    "beforeDevCommand": "",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist"
+  },
+  "tauri": {
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 900,
+        "resizable": true,
+        "title": "ChatAI",
+        "width": 1400
+      }
+    ],
+    "security": {
+      "csp": null
+    },
+    "bundle": {
+      "active": false,
+      "identifier": "com.chatai.app"
+    }
+  },
+  "package": {
+    "productName": "ChatAI",
+    "version": "0.1.0"
+  }
+}

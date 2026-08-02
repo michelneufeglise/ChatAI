@@ -1,0 +1,149 @@
+.message-bubble {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+  animation: slideInMessage 0.3s ease-out;
+}
+
+.message-bubble.ai {
+  justify-content: flex-start;
+}
+
+.message-bubble.user {
+  justify-content: flex-end;
+}
+
+.message-bubble .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(100, 108, 255, 0.3);
+}
+
+.message-content {
+  max-width: 55%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  word-wrap: break-word;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.message-bubble.ai .message-content {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(100, 108, 255, 0.05) 100%);
+  color: #fff;
+  border-color: rgba(100, 108, 255, 0.2);
+}
+
+.message-bubble.user .message-content {
+  background: linear-gradient(135deg, #646cff 0%, #64b5ff 100%);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(100, 108, 255, 0.3);
+}
+
+.message-content .sender-info {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 0.8em;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.message-content .sender-name {
+  font-weight: 700;
+  color: inherit;
+  opacity: 0.9;
+}
+
+.message-content .platform-badge {
+  font-size: 0.75em;
+  opacity: 0.7;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  white-space: nowrap;
+  color: inherit;
+}
+
+.message-bubble.user .platform-badge {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.message-content .message-text {
+  margin: 6px 0;
+  line-height: 1.4;
+  color: inherit;
+  word-break: break-word;
+}
+
+.message-content .message-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 0.75em;
+  opacity: 0.7;
+}
+
+.message-content .timestamp {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.message-content .status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.message-content .status-icon.sending {
+  animation: pulse 1s infinite;
+}
+
+.message-content .status-icon.read {
+  color: #4ade80;
+}
+
+.message-content .status-icon.error {
+  color: #f87171;
+}
+
+@keyframes slideInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 768px) {
+  .message-content {
+    max-width: 75%;
+  }
+
+  .message-content .sender-info {
+    font-size: 0.75em;
+  }
+
+  .message-content .platform-badge {
+    display: none;
+  }
+}
